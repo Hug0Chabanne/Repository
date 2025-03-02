@@ -10,14 +10,14 @@ const app = express();
 app.use(express.json());
 
 const PORT = 3000;
-const SECRET_KEY = 'votre_cle_secrete_tres_longue_et_complexe'; // À remplacer par une vraie clé sécurisée
+const SECRET_KEY = 'votre_cle_secrete_tres_longue_et_complexe'; 
 
-// Connexion à la base de données MySQL
+
 const db = mysql.createConnection({
     host: 'localhost',
-    user: 'root', // Remplacez par votre utilisateur MySQL
-    password: '', // Remplacez par votre mot de passe MySQL
-    database: 'projetexpress' // Remplacez par votre nom de base de données
+    user: 'root', 
+    password: '', 
+    database: 'projetexpress' 
 });
 
 db.connect(err => {
@@ -28,17 +28,16 @@ db.connect(err => {
     }
 });
 
-// Page d'accueil
+
 app.get('/', (req, res) => {
     res.send('Bienvenue sur l\'API');
 });
 
-// Route de test
+
 app.get('/test', (req, res) => {
     res.send('hello');
 });
 
-// Route pour s'inscrire (optionnelle)
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
 
@@ -61,7 +60,7 @@ app.post('/register', (req, res) => {
     });
 });
 
-// Route de connexion
+
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -80,7 +79,7 @@ app.post('/login', (req, res) => {
 
         const user = results[0];
 
-        // Vérification du mot de passe
+      
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) {
                 return res.status(500).json({ message: 'Erreur interne du serveur' });
@@ -90,7 +89,7 @@ app.post('/login', (req, res) => {
                 return res.status(400).json({ message: 'Mot de passe incorrect' });
             }
 
-            // Création du token JWT
+          
             const token = jwt.sign(
                 { userId: user.id, username: user.username },
                 SECRET_KEY,
@@ -102,7 +101,7 @@ app.post('/login', (req, res) => {
     });
 });
 
-// Démarrer le serveur
+
 app.listen(PORT, () => {
     console.log(`🚀 Serveur en écoute sur http://localhost:${PORT}`);
 });
